@@ -1,0 +1,4 @@
+jedi==0.15.2
+nxt-python==2.2.2
+parso==0.7.1
+redis==3.5.3
