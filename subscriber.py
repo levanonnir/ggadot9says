@@ -1,6 +1,6 @@
 from connector import connect_to_redis_server
 
-env = 'dev'
+env = 'ggadot'
 
 client = connect_to_redis_server()
 
