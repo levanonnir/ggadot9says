@@ -8,7 +8,6 @@ if __name__ == "__main__":
   pub = connect_to_redis_server()
   lego = Lego()
   robolego_connected = False
-  power = 30
   robolego_name = ""
 
   while True:
@@ -25,12 +24,9 @@ if __name__ == "__main__":
         color = lego.sample_color()
         pub.publish(CHANNEL, "%s:color:%s" % (robolego_name, color))
         pub.publish(CHANNEL, "%s:status:online" % robolego_name)
-      elif "power" in action:
-        power = int(details)
-        print "%s's power changed to %s" % (platform, power)
       elif action in lego.movementDirections:
         movement_function = getattr(lego, action)
-        movement_function(power)
+        movement_function(int(details))  # details will be the power setting here.
         if action != "stop":
           pub.publish(CHANNEL, "%s:status:moving" % robolego_name)
         else:
