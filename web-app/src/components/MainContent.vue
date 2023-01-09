@@ -22,7 +22,6 @@
                 x-large
                 @mousedown="robolegoDrive('forward')"
                 @mouseup="robolegoStop"
-                :disabled="robolegoMoving"
               >
                 <v-icon>mdi-chevron-up</v-icon>
               </v-btn>
@@ -35,7 +34,6 @@
                 x-large
                 @mousedown="robolegoDrive('turn_left')"
                 @mouseup="robolegoStop"
-                :disabled="robolegoMoving"
               >
                 <v-icon>mdi-chevron-left</v-icon>
               </v-btn>
@@ -46,7 +44,6 @@
                 x-large
                 :color="color"
                 @mousedown="robolegoSampleColor"
-                :disabled="robolegoMoving"
               >
                 <v-icon>mdi-eyedropper-variant</v-icon>
               </v-btn>
@@ -57,7 +54,6 @@
                 x-large
                 @mousedown="robolegoDrive('turn_right')"
                 @mouseup="robolegoStop"
-                :disabled="robolegoMoving"
               >
                 <v-icon>mdi-chevron-right</v-icon>
               </v-btn>
@@ -70,7 +66,6 @@
                 x-large
                 @mousedown="robolegoDrive('backward')"
                 @mouseup="robolegoStop"
-                :disabled="robolegoMoving"
               >
                 <v-icon>mdi-chevron-down</v-icon>
               </v-btn>
@@ -84,7 +79,6 @@
                 label="Power"
                 min="0"
                 max="100"
-                :disabled="robolegoMoving"
               ></v-slider>
             </v-col>
           </v-row>
@@ -306,7 +300,7 @@ export default {
       this.ws.send(actionMessage);
     },
     robolegoDrive(direction) {
-      if (direction in this.movementDirections) {
+      if (this.movementDirections.includes(direction)) {
         const driveMessage = `${this.robolegoName}:${direction}:${this.power}`;
         this.ws.send(driveMessage);
       } else {
