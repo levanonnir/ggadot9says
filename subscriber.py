@@ -14,3 +14,8 @@ def handle_message(message):
 			print 'Received command: {}'.format(message)
 			print 'Action: %s on platform: %s' % (action, platform, details)
 			return platform, action, details
+
+if __name__ == '__main__':
+	sub = create_subscriber()
+	platform, action, details = handle_message(sub.get_message())
+	print platform, action, details

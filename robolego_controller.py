@@ -22,12 +22,11 @@ if __name__ == "__main__":
         pub.publish(CHANNEL, "%s:color:%s" % (robolego_name, color))
         pub.publish(CHANNEL, "%s:status:online" % robolego_name)
       elif "power" in action:
-        _, value = action.split("_")
-        power = value
-        print "%s's power changed to %s" % (details, power)
+        power = details
+        print "%s's power changed to %s" % (platform, power)
       elif action in lego.movementDirections:
-        movement_funtion = getattr(lego, action)
-        movement_funtion(power)
+        movement_function = getattr(lego, action)
+        movement_function(power)
         if action != "stop":
           pub.publish(CHANNEL, "%s:status:moving" % robolego_name)
         else:
