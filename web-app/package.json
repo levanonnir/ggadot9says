@@ -18,7 +18,7 @@
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
     "vue-cli-plugin-vuetify-preset-rally": "^1.0.4",
-    "vuefire": "^3.0.1",
+    "vuefire": "^2.2.5",
     "vuetify": "^2.6.0",
     "ws": "^8.11.0"
   },
@@ -35,6 +35,7 @@
     "prettier": "^2.2.1",
     "sass": "~1.32.0",
     "sass-loader": "^7.1.0",
+    "vue-cli-plugin-vuefire": "~1.0.2",
     "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"

@@ -80,7 +80,6 @@
             <v-col cols="10">
               <v-slider
                 v-model="power"
-                @change="robolegoChangePower"
                 thumb-label
                 label="Power"
                 min="0"
@@ -222,7 +221,7 @@ export default {
           case this.robolegoName:
             switch (dataParts[1]) {
               case "status":
-                this.robolego = dataParts[2]
+                this.robolego = dataParts[2];
                 switch (dataParts[2]) {
                   case "offline":
                     this.robolegoConnectionFail();
@@ -308,7 +307,7 @@ export default {
     },
     robolegoDrive(direction) {
       if (direction in this.movementDirections) {
-        const driveMessage = `${this.robolegoName}:${direction}:${this.robolegoName}`;
+        const driveMessage = `${this.robolegoName}:${direction}:${this.power}`;
         this.ws.send(driveMessage);
       } else {
         this.snackbarText = "Wrong direction attempted. Process prevented.";
@@ -316,18 +315,14 @@ export default {
       }
     },
     robolegoStop() {
-      const stopMessage = `${this.robolegoName}:stop:${this.robolegoName}`;
+      const stopMessage = `${this.robolegoName}:stop:${this.power}`;
       this.ws.send(stopMessage);
     },
     robolegoSampleColor() {
-      const sampleMessage = `${this.robolegoName}:sample_color:${this.robolegoName}`;
+      const sampleMessage = `${this.robolegoName}:sample_color:${this.power}`;
       this.ws.send(sampleMessage);
       this.snackbarText = "Sampling color...";
       this.snackbar = true;
-    },
-    robolegoChangePower() {
-      const powerMessage = `${this.robolegoName}:power:${this.power}`;
-      this.ws.send(powerMessage);
     }
   },
   computed: {
@@ -354,7 +349,7 @@ export default {
       return this.robolegoConnecting || this.robolegoSampling;
     },
     robolegoMoving() {
-      return this.robolego == 'moving'
+      return this.robolego == "moving";
     },
     scorpConnected() {
       return this.scorp != "offline";
