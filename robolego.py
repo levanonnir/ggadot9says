@@ -28,8 +28,24 @@ class Lego:
         self.touch=nxt.sensor.Touch(self.brick,nxt.sensor.PORT_2)
         self.light=nxt.sensor.Light(self.brick,nxt.sensor.PORT_3)
         self.light.set_input_mode(nxt.sensor.Type.LIGHT_ACTIVE, nxt.sensor.Mode.RAW)
+        self.colors = {
+            1: 'black',
+            2: 'blue',
+            3: 'green',
+            4: 'yellow',
+            5: 'red',
+            6: 'white',
+            -1: 'nothing'
+        }
+        self.movementDirections = [
+            "forward",
+            "backward",
+            "turn_left",
+            "turn_right",
+            "stop"
+        ]
 
-        print('Connected')
+        print('%s connected successfully.' % name)
 
     def forward(self, power):
         self.stop()
@@ -37,6 +53,13 @@ class Lego:
         self.left.run(power)
         # Run the right engine forward
         self.right.run(power)
+
+    def backward(self, power):
+        self.stop()
+        # Run the left engine backward
+        self.left.run(-power)
+        # Run the right engine backward
+        self.right.run(-power)
 
     def turn_left(self, power):
         self.stop()
@@ -57,6 +80,11 @@ class Lego:
         self.left.brake()
         # Brake the right engine
         self.right.brake()
+
+    def sample_color(self):
+        # Find the color number using nxt.sensor.Color20 and Get color name using colors dictionary
+        color = self.colors.get(nxt.sensor.Color20(self.b, nxt.sensor.PORT_1).get_sample())
+        return color
 
     def cross_road(self, power, saf):
         '''
