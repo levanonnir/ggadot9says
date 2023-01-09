@@ -42,7 +42,6 @@ class Lego:
             "backward",
             "turn_left",
             "turn_right",
-            "stop"
         ]
 
         print('%s connected successfully.' % name)
@@ -83,7 +82,7 @@ class Lego:
 
     def sample_color(self):
         # Find the color number using nxt.sensor.Color20 and Get color name using colors dictionary
-        color = self.colors.get(nxt.sensor.Color20(self.b, nxt.sensor.PORT_1).get_sample())
+        color = self.colors.get(nxt.sensor.Color20(self.brick, nxt.sensor.PORT_1).get_sample())
         return color
 
     def cross_road(self, power, saf):

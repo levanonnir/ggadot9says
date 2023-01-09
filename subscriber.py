@@ -12,10 +12,12 @@ def handle_message(message):
 			message = message['data'].decode('utf-8')
 			platform, action, details = message.split(':')
 			print 'Received command: {}'.format(message)
-			print 'Action: %s on platform: %s' % (action, platform, details)
+			# print 'Action: %s on platform: %s' % (action, platform, details)
 			return platform, action, details
 
 if __name__ == '__main__':
 	sub = create_subscriber()
-	platform, action, details = handle_message(sub.get_message())
-	print platform, action, details
+	while True:
+	    # platform, action, details = handle_message(sub.get_message())
+	    # print platform, action, details
+		print sub.get_message()

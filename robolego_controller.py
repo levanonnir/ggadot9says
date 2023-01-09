@@ -12,7 +12,11 @@ if __name__ == "__main__":
   robolego_name = ""
 
   while True:
-    platform, action, details = handle_message(sub.get_message())
+    platform, action, details = "", "", ""
+    try:
+      platform, action, details = handle_message(sub.get_message())
+    except:
+      pass
     
     if robolego_connected and platform == robolego_name:
       # Execute command only if the robot is connected, and the command was sent to him.
@@ -22,7 +26,7 @@ if __name__ == "__main__":
         pub.publish(CHANNEL, "%s:color:%s" % (robolego_name, color))
         pub.publish(CHANNEL, "%s:status:online" % robolego_name)
       elif "power" in action:
-        power = details
+        power = int(details)
         print "%s's power changed to %s" % (platform, power)
       elif action in lego.movementDirections:
         movement_function = getattr(lego, action)
@@ -31,6 +35,9 @@ if __name__ == "__main__":
           pub.publish(CHANNEL, "%s:status:moving" % robolego_name)
         else:
           pub.publish(CHANNEL, "%s:status:online" % robolego_name)
+      elif action == "stop":
+        lego.stop()
+        pub.publish(CHANNEL, "%s:status:online" % robolego_name)
     else:
       if platform == 'lego' and action == 'connect':
         message = "%s:status:" % details
