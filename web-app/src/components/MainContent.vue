@@ -308,7 +308,7 @@ export default {
     },
     robolegoDrive(direction) {
       if (direction in this.movementDirections) {
-        const driveMessage = `${robolegoName}:${direction}:${this.robolegoName}`;
+        const driveMessage = `${this.robolegoName}:${direction}:${this.robolegoName}`;
         this.ws.send(driveMessage);
       } else {
         this.snackbarText = "Wrong direction attempted. Process prevented.";
@@ -316,17 +316,17 @@ export default {
       }
     },
     robolegoStop() {
-      const stopMessage = `${robolegoName}:stop:${this.robolegoName}`;
+      const stopMessage = `${this.robolegoName}:stop:${this.robolegoName}`;
       this.ws.send(stopMessage);
     },
     robolegoSampleColor() {
-      const sampleMessage = `${robolegoName}:sample_color:${this.robolegoName}`;
+      const sampleMessage = `${this.robolegoName}:sample_color:${this.robolegoName}`;
       this.ws.send(sampleMessage);
       this.snackbarText = "Sampling color...";
       this.snackbar = true;
     },
     robolegoChangePower() {
-      const powerMessage = `${robolegoName}:power_${this.power}:${this.robolegoName}`;
+      const powerMessage = `${this.robolegoName}:power:${this.power}`;
       this.ws.send(powerMessage);
     }
   },
