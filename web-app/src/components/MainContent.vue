@@ -102,7 +102,7 @@
               ></v-text-field>
             </v-col>
             <v-col cols="10">
-              <v-btn block @click="connectRobolego" :disabled="robolegoFrozen"
+              <v-btn block @click="connectRobolego" :loading="robolegoFrozen"
                 >Connect</v-btn
               >
             </v-col>
@@ -122,7 +122,9 @@
               <div class="text-h6">ScorpBot Controller</div>
             </v-col>
             <v-col v-if="!scorpConnected" cols="10">
-              <v-btn block @click="connectScorp">Connect</v-btn>
+              <v-btn block @click="connectScorp" :loading="scorpConnecting"
+                >Connect</v-btn
+              >
             </v-col>
             <v-col v-if="scorpConnected" cols="5">
               <v-btn
@@ -162,8 +164,8 @@
         </div>
       </v-col>
       <v-col>
-        <v-btn @click.prevent="checkServer" block :disabled="checkRedisServer">
-          Check
+        <v-btn @click.prevent="pingServer" block :disabled="pingRedisServer" :loading="pingRedisServer">
+          ping
         </v-btn>
       </v-col>
     </v-row>
@@ -183,17 +185,18 @@
 export default {
   data() {
     return {
-      ws: new WebSocket("ws://localhost:3000/"),
+      ws: null,
       redisConnection: false,
-      checkRedisServer: false,
+      pingRedisServer: false,
       robolego: "offline",
-      robolegoName: "",
       robolegoConnecting: false,
+      robolegoName: "",
       robolegoSampling: false,
       power: 30,
       color: "",
       colors: [],
       scorp: "offline",
+      scorpConnecting: false,
       movementDirections: [
         "forward",
         "backward",
@@ -206,6 +209,15 @@ export default {
     };
   },
   created() {
+    document.title = "GGadot9 Says - Group 7";
+    const path =
+      process.env.NODE_ENV === "production"
+        ? "ggadot9says.web.app"
+        : "127.0.0.1";
+    this.ws = new WebSocket(`ws://${path}:3000/`);
+    this.ws.onopen = () => {
+      this.pingServer()
+    }
     try {
       this.ws.onmessage = ({ data }) => {
         this.redisConnection = true;
@@ -246,8 +258,8 @@ export default {
           case "server":
             switch (dataParts[1]) {
               case "connection":
-                this.redisConnection = dataParts[2];
-                this.checkRedisServer = false;
+                this.redisConnection = Boolean(dataParts[2]);
+                this.pingRedisServer = false;
                 break;
             }
         }
@@ -260,9 +272,10 @@ export default {
     }
   },
   methods: {
-    checkServer() {
-      this.checkRedisServer = true;
-      this.ws.send("server:connection:check");
+    pingServer() {
+      this.redisConnection = false;
+      this.pingRedisServer = true;
+      this.ws.send("server:connection:ping");
     },
     connectRobolego() {
       this.robolegoConnecting = true;

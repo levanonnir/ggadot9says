@@ -18,6 +18,9 @@ def handle_message(message):
 if __name__ == '__main__':
 	sub = create_subscriber()
 	while True:
-	    # platform, action, details = handle_message(sub.get_message())
-	    # print platform, action, details
-		print sub.get_message()
+		platform, action, details = "", "", ""
+		try:
+			platform, action, details = handle_message(sub.get_message())
+			print (platform, action, details)
+		except:
+			pass
