@@ -10,8 +10,10 @@ const redisServerDetails = {
 const sub = new Redis(redisServerDetails);
 const pub = new Redis(redisServerDetails);
 const WS_PORT = 3000;
+const outboundChannel = "ggadot";
+const inboundChannel = "app";
 
-sub.subscribe("ggadot", (err, count) => {
+sub.subscribe(inboundChannel, (err, count) => {
   if (err) {
     // Just like other commands, subscribe() can fail for some reasons,
     // ex network issues.
@@ -33,11 +35,16 @@ server.on("connection", function connection(ws) {
   });
 
   ws.on("message", message => {
-    if (message == "server:connection:ping") {
-      result = pub.ping();
-      ws.send(`server:connection:${result}`);
-    } else {
-      pub.publish("ggadot", message);
-    }
+    // if (message == "server:connection:ping") {
+    //   // async const result = pub.ping().then((err, res) => {
+    //   //   result = res;
+    //   // });
+    //   // const response = `server:connection:${result}`;
+    //   // ws.send(response);
+    //   // console.log(`Sending to FE: ${response}`);
+    // } else {
+      console.log(`Publishing to server: ${message}`);
+      pub.publish(outboundChannel, message);
+    // }
   });
 });

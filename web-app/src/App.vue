@@ -30,10 +30,11 @@
 
 <script>
 import MainContent from "./components/MainContent";
-
+// import { functions } from './firebase';
+// import {  httpsCallable } from 'firebase/functions';
+    
 export default {
   name: "App",
-
   components: {
     MainContent,
   },
@@ -41,5 +42,16 @@ export default {
   data: () => ({
     //
   }),
+  // methods: {
+  //   startWebSocket() {
+  //     const startWebSocketFunction = httpsCallable(functions, "startWebSocket");
+  //     try {
+  //       startWebSocketFunction()
+  //     }
+  //   }
+  // },
+  // created() {
+  //   this.startWebSocket()
+  // }
 };
 </script>

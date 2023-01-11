@@ -135,9 +135,13 @@
                 Home
               </v-btn>
             </v-col>
-            <v-col v-if="scorpConnected" cols="5" class="text-end">
-              <v-btn :disabled="scorpDisabled">Calibrate</v-btn>
-            </v-col>
+            <!-- <v-col v-if="scorpConnected" cols="5" class="text-end">
+              <v-btn
+                @click="scorpPerfromAction('calibrate')"
+                :disabled="scorpDisabled"
+                >Calibrate</v-btn
+              >
+            </v-col> -->
             <v-col v-if="scorpConnected" cols="10">
               <v-btn
                 v-for="color in colors"
@@ -150,24 +154,38 @@
                 {{ color }}
               </v-btn>
             </v-col>
+            <v-col v-if="scorpConnected" cols="10">
+              <v-text-field
+                v-model="point"
+                type="number"
+                label="Move to point..."
+                :disabled="scorpDisabled"
+                
+              ></v-text-field>
+            </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
     <v-row align="center">
-      <v-col>
+      <!-- <v-col>
         <div class="text-overline">
           Redis Server:
           <span :class="redisServerColor">
             {{ redisServer }}
           </span>
         </div>
-      </v-col>
-      <v-col>
-        <v-btn @click.prevent="pingServer" block :disabled="pingRedisServer" :loading="pingRedisServer">
+      </v-col> -->
+      <!-- <v-col>
+        <v-btn
+          @click.prevent="pingServer"
+          block
+          :disabled="pingingRedisServer"
+          :loading="pingingRedisServer"
+        >
           ping
         </v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
     <v-snackbar v-model="snackbar">
       {{ snackbarText }}
@@ -187,7 +205,7 @@ export default {
     return {
       ws: null,
       redisConnection: false,
-      pingRedisServer: false,
+      pingingRedisServer: false,
       robolego: "offline",
       robolegoConnecting: false,
       robolegoName: "",
@@ -196,6 +214,7 @@ export default {
       color: "",
       colors: [],
       scorp: "offline",
+      number: 0,
       scorpConnecting: false,
       movementDirections: [
         "forward",
@@ -210,17 +229,13 @@ export default {
   },
   created() {
     document.title = "GGadot9 Says - Group 7";
-    const path =
-      process.env.NODE_ENV === "production"
-        ? "ggadot9says.web.app"
-        : "127.0.0.1";
-    this.ws = new WebSocket(`ws://${path}:3000/`);
+    this.ws = new WebSocket("ws://localhost:3000/");
     this.ws.onopen = () => {
-      this.pingServer()
-    }
+      this.pingServer();
+    };
     try {
       this.ws.onmessage = ({ data }) => {
-        this.redisConnection = true;
+        // this.redisConnection = true;
         this.message = data;
         const dataParts = data.split(":");
         switch (dataParts[0]) {
@@ -258,8 +273,8 @@ export default {
           case "server":
             switch (dataParts[1]) {
               case "connection":
-                this.redisConnection = Boolean(dataParts[2]);
-                this.pingRedisServer = false;
+                this.redisConnection = dataParts[2] == "ping";
+                this.pingingRedisServer = false;
                 break;
             }
         }
@@ -272,15 +287,35 @@ export default {
     }
   },
   methods: {
+    initWebSocket() {
+      const path =
+        process.env.NODE_ENV === "production"
+          ? "ggadot9says.web.app"
+          : "localhost";
+      return new WebSocket(`ws://${path}:3000/`);
+    },
     pingServer() {
       this.redisConnection = false;
-      this.pingRedisServer = true;
-      this.ws.send("server:connection:ping");
+      try {
+        // this.ws = this.initWebSocket();
+        this.pingingRedisServer = true;
+        this.ws.send("server:connection:ping");
+      } catch (error) {
+        this.pingingRedisServer = false;
+        this.snackbarText = error.message;
+        this.snackbar = true;
+      }
     },
     connectRobolego() {
-      this.robolegoConnecting = true;
-      const connectMessage = `lego:connect:${this.robolegoName}`;
-      this.ws.send(connectMessage);
+      try {
+        this.robolegoConnecting = true;
+        const connectMessage = `lego:connect:${this.robolegoName}`;
+        this.ws.send(connectMessage);
+      } catch (error) {
+        this.robolegoConnecting = false;
+        this.snackbarText = error.message;
+        this.snackbar = true;
+      }
     },
     robolegoConnectionSuccessful() {
       this.robolegoConnecting = false;
@@ -293,9 +328,15 @@ export default {
       this.snackbar = true;
     },
     connectScorp() {
-      this.scorp = "connecting...";
-      const connectMessage = "scorp:action:connect";
-      this.ws.send(connectMessage);
+      try {
+        this.scorp = "connecting...";
+        const connectMessage = "scorp:action:connect";
+        this.ws.send(connectMessage);
+      } catch (error) {
+        this.robolegoConnecting = false;
+        this.snackbarText = error.message;
+        this.snackbar = true;
+      }
     },
     scorpConnectionSuccessful() {
       this.scorp = "online";
@@ -308,7 +349,7 @@ export default {
       this.snackbar = true;
     },
     scorpPerfromAction(action) {
-      this.scorp = "Moving...";
+      // this.scorp = "Moving...";
       const actionMessage = `scorp:action:${action}`;
       this.ws.send(actionMessage);
     },
