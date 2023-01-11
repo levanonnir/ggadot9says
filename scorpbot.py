@@ -15,6 +15,7 @@ class ScorpBot():
         self.robot.home_robot()
 
     def calibrate(self):
+        # TODO: Calibrate these points in advance before using.
         p1 = (769, 290)
         p3 = (675, 304)
         p2 = (859, 234)
@@ -36,16 +37,3 @@ class ScorpBot():
             self.robot.move(99)
         except Exception as e:
             print e
-
-
-    # def teach_positions(self,num_point,x,y,z,pitch,roll):
-    #     self.robot.teach_absolute_xyz_position(num_point,x,y,z,pitch,roll)
-    # blue position - (1, 359, -26, 47, -107, -324)
-    # red position - (2,346, 41, 50, -107, -324)
-    # white position - (3, 304, 5, 55, -107, -324)
-    # orange position - (4, 259, 52, 54, -107, -324)
-    # green position -(5,234, 9, 56, -107, -324)
-
-# s = ScorpBot()
-# s.robot.move(20)
-

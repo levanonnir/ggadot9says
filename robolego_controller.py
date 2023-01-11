@@ -1,3 +1,11 @@
+""""
+This file is used to control the actions of the NXT RoboLego.
+Run it in a thread at all times in order to communicate with the NXT.
+Please note - you need to connect the RoboLego via Bluetooth prior to runnning this.
+This script will perform pub/sub operations to/from the Redis AWS server,
+and perform actions according to the format of platform:action:details.
+"""
+
 from robolego import Lego
 from subscriber import create_subscriber, handle_message
 from connector import connect_to_redis_server

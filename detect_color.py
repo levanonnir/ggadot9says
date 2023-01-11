@@ -2,7 +2,14 @@ import cv2
 import numpy as np
 
 class ColorDetector():
-
+    """
+    This class is used in order to detect a single color
+    at each init.
+    The lower and upper bounds have been set using the
+    assistance_scripts/detect_color_hsv.py script.
+    Look at the code example under the main function
+    in order to understand how the class should be implemented.
+    """
     def __init__(self, path, color):
         self.color = color
         self.path = path

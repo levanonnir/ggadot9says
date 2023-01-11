@@ -1,3 +1,9 @@
+"""
+This file can be run in order to publish a message to the Redis AWS server.
+In order to do this, run:
+python publisher.py _channel_ _message_
+"""
+
 import sys
 from connector import connect_to_redis_server
 

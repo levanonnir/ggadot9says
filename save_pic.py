@@ -1,6 +1,6 @@
 import cv2,os
 
-def save_pic(path='img1.jpg',flag=None):
+def save_pic(path='image/capture.jpg',flag=None):
     """
     Show stream s key save img q key aborts.
     parameters:

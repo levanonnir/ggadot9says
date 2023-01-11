@@ -1,5 +1,9 @@
 import cv2,numpy as np,math
 class Contour():
+    """
+    This class can be used to find the contours and
+    centers of mass for a given image.
+    """
     def __init__(self,path,n):
         self.path=path
         #Num objects
