@@ -30,8 +30,8 @@ class ColorDetector():
         image = cv2.imread(self.path)
         mask = cv2.inRange(image, lower_bound, upper_bound)
         detected_output = cv2.bitwise_and(image, image, mask =  mask)
-        cv2.imshow("color detection", detected_output)
-        cv2.imwrite("color detection.jpg", detected_output) 
+        cv2.imshow(self.color, detected_output)
+        cv2.imwrite("%s.jpg" % self.color, detected_output) 
         cv2.waitKey(0)
 
 def main():

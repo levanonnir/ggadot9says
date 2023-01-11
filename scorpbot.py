@@ -6,13 +6,14 @@ from globals import OUTBOUND_CHANNEL, COLORS
 class ScorpBot():
     def __init__(self):
         self.robot = Client()
+        self.color_points = {}
         self.robot.close_gripper()
+        self.calibrator = calibration.Translator2D()
 
     def go_home(self):
         self.robot.home_robot()
 
     def calibrate(self):
-        self.calibrator = calibration.Translator2D()
         p1 = (769, 290)
         p3 = (675, 304)
         p2 = (859, 234)
@@ -23,6 +24,12 @@ class ScorpBot():
         self.robot.teach_absolute_xyz_position(20, 304, -14, 55, -107, -324)
         q3 = self.robot.get_position_coordinates(20)
         self.calibrator.calibration(p1, p2, p3, q1, q2, q3)
+
+    def touch_color_point(self, color):
+        point = self.color_points.get(color)
+        c = self.calibrator.transform_point(point)
+        self.teach_absolute_xyz_position(99, c[0], c[1], c[2], c[3], c[4])
+        self.move(99)
 
 
     # def teach_positions(self,num_point,x,y,z,pitch,roll):
