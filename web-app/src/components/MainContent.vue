@@ -135,13 +135,13 @@
                 Home
               </v-btn>
             </v-col>
-            <!-- <v-col v-if="scorpConnected" cols="5" class="text-end">
+            <v-col v-if="scorpConnected" cols="5" class="text-end">
               <v-btn
                 @click="scorpPerfromAction('calibrate')"
                 :disabled="scorpDisabled"
                 >Calibrate</v-btn
               >
-            </v-col> -->
+            </v-col>
             <v-col v-if="scorpConnected" cols="10">
               <v-btn
                 v-for="color in colors"
@@ -253,9 +253,9 @@ export default {
                 }
                 break;
               case "color":
-                if (dataParts[2] != "nothing") {
+                if (!["nothing", "black"].includes(dataParts[2])) {
                   this.color = dataParts[2];
-                  this.colors.concat(this.color);
+                  this.colors.push(this.color);
                 }
                 this.robolegoSampling = false;
                 this.snackbarText = `${this.robolegoName} found ${this.color}`;
