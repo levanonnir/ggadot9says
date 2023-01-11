@@ -30,6 +30,11 @@ class ScorpBot():
         self.color_points = self.webcam.color_points
 
     def touch_color_point(self, color):
+        """
+        This functino will touch the center of mass
+        of a given color, as taken in the webcam's picture
+        and as calculated by the Contour & ColorDetector classes.
+        """
         try:
             point = self.color_points.get(color)
             print point

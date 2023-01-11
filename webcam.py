@@ -15,7 +15,7 @@ class Webcam:
         sensor's spectrum within the webcam's view, and save
         each color's center of mass to self.color_points
         as a dictionary with the format {"color": (x,y)}.
-        Please note that the values of black, white and nothing
+        Please note that the values of black, white, yellow and nothing
         have been removed in order to prevent problems with the
         background used within the CIM Lab.
         """
