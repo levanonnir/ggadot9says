@@ -1,5 +1,5 @@
 import nxt.locator,nxt.motor,nxt.sensor,time
-
+from globals import COLORS
 # moving:
 # run(power)  #run at 'power' speed, [-100,100], - is backwards
 # time.sleep(time4Line)    #"sleep" for 'time4Line', before moving on to next command
@@ -28,15 +28,7 @@ class Lego:
         self.touch=nxt.sensor.Touch(self.brick,nxt.sensor.PORT_2)
         self.light=nxt.sensor.Light(self.brick,nxt.sensor.PORT_3)
         self.light.set_input_mode(nxt.sensor.Type.LIGHT_ACTIVE, nxt.sensor.Mode.RAW)
-        self.colors = {
-            1: 'black',
-            2: 'blue',
-            3: 'green',
-            4: 'yellow',
-            5: 'red',
-            6: 'white',
-            -1: 'nothing'
-        }
+        self.colors = COLORS
         self.movementDirections = [
             "forward",
             "backward",

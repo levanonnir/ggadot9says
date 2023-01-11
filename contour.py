@@ -13,7 +13,7 @@ class Contour():
         #Convert to one bit above 127 white, below black
         ret, thresh = cv2.threshold(imgray, 0, 255, cv2.THRESH_BINARY)
         #Find contours
-        contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         #Sort the contours in reverse order using Lambda, sorted,cv2.arcLength
         mmuyan=sorted(contours, key= lambda c : cv2.arcLength(c,True),reverse=True )
         #Declaire list of center of mases.
@@ -55,6 +55,7 @@ class Contour():
         #Return list with all center of mases.
         return self.cms
 
-cont=Contour('color detection.jpg',1)
-cont.show()
-print(cont.get_cm())
+if __name__ == '__main__':
+    cont=Contour('color detection.jpg',1)
+    cont.show()
+    print(cont.get_cm())

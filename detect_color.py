@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-class DetectColor_image():  
+class ColorDetector():
 
     def __init__(self, path, color):
         self.color = color
@@ -36,7 +36,7 @@ class DetectColor_image():
 
 def main():
     color = input("What color? ").lower()
-    detect = DetectColor_image('image.jpg', color)
+    detect = ColorDetector('image.jpg', color)
     detect.detect_color()
 
 if __name__ == '__main__':
