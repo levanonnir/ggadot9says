@@ -12,6 +12,7 @@ class Webcam:
     def detect_all_colors(self):
         # Create a list of colors that are relevant for searching:
         valid_colors = list(COLORS.values())
+        valid_colors.remove("yellow")
         valid_colors.remove("black")
         valid_colors.remove("white")
         valid_colors.remove("nothing")

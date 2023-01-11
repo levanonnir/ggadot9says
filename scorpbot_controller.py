@@ -51,7 +51,7 @@ if __name__ == "__main__":
           try:
             print "Publish: %shoming" % message
             pub.publish(OUTBOUND_CHANNEL, message + "homing")
-            scorp.go_home()
+            # scorp.go_home()
             print "Publish: %scalibrating" % message
             pub.publish(OUTBOUND_CHANNEL, message + "calibrating")
             scorp.calibrate()

@@ -26,14 +26,16 @@ class ScorpBot():
         q3 = self.robot.get_position_coordinates(20)
         self.calibrator.calibration(p1, p2, p3, q1, q2, q3)
         self.webcam.detect_all_colors()
-        self.color_points = self.webcam.color_points()
+        self.color_points = self.webcam.color_points
 
     def touch_color_point(self, color):
         try:
             point = self.color_points.get(color)
+            print point
             c = self.calibrator.transform_point(point)
-            self.robot.teach_absolute_xyz_position(99, c[0], c[1], c[2], c[3], c[4])
-            self.robot.move(99)
+            print c
+            self.robot.teach_absolute_xyz_position(40, c[0], c[1], 55, -107, -324)
+            self.robot.move(40)
         except Exception as e:
             print e
 
