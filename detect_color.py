@@ -8,6 +8,8 @@ class ColorDetector():
         self.path = path
 
     def detect_color(self):  
+        lower_bound = None
+        upper_bound = None
         if self.color == "red":
             lower_bound = np.array([17, 15, 100], dtype = "uint8") # lower_red
             upper_bound = np.array([50, 56, 200], dtype = "uint8") # upper_red
@@ -26,6 +28,8 @@ class ColorDetector():
         elif self.color == "black":
             lower_bound = np.array([0, 0, 0], dtype = "uint8")  # lower_black
             upper_bound = np.array([0, 0, 0], dtype = "uint8") # upper_black
+        elif self.color == "nothing":
+            return
         
         image = cv2.imread(self.path)
         mask = cv2.inRange(image, lower_bound, upper_bound)

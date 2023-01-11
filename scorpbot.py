@@ -1,6 +1,6 @@
 from scorpy.scorbotAPI import Client
 from scorpy.simpleView import calibration
-from globals import OUTBOUND_CHANNEL, COLORS
+from webcam import Webcam
 
 
 class ScorpBot():
@@ -9,6 +9,7 @@ class ScorpBot():
         self.color_points = {}
         self.robot.close_gripper()
         self.calibrator = calibration.Translator2D()
+        self.webcam = Webcam()
 
     def go_home(self):
         self.robot.home_robot()
@@ -24,12 +25,17 @@ class ScorpBot():
         self.robot.teach_absolute_xyz_position(20, 304, -14, 55, -107, -324)
         q3 = self.robot.get_position_coordinates(20)
         self.calibrator.calibration(p1, p2, p3, q1, q2, q3)
+        self.webcam.detect_all_colors()
+        self.color_points = self.webcam.color_points()
 
     def touch_color_point(self, color):
-        point = self.color_points.get(color)
-        c = self.calibrator.transform_point(point)
-        self.teach_absolute_xyz_position(99, c[0], c[1], c[2], c[3], c[4])
-        self.move(99)
+        try:
+            point = self.color_points.get(color)
+            c = self.calibrator.transform_point(point)
+            self.robot.teach_absolute_xyz_position(99, c[0], c[1], c[2], c[3], c[4])
+            self.robot.move(99)
+        except Exception as e:
+            print e
 
 
     # def teach_positions(self,num_point,x,y,z,pitch,roll):

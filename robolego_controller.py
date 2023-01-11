@@ -10,6 +10,7 @@ if __name__ == "__main__":
   robolego_connected = False
   robolego_name = ""
 
+  print "RoboLego awaiting orders..."
   while True:
     platform, action, details = "", "", ""
     try:

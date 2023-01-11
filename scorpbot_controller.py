@@ -2,14 +2,13 @@ from scorpbot import ScorpBot
 from subscriber import create_subscriber, handle_message
 from connector import connect_to_redis_server
 from globals import OUTBOUND_CHANNEL, COLORS
-from webcam import Webcam
 
 if __name__ == "__main__":
   sub = create_subscriber()
   pub = connect_to_redis_server()
   scorp = ScorpBot()
   scorpbot_connected = False
-  webcam = Webcam()
+  print "ScorpBot awaiting orders..."
   while True:
     platform, action, details = "", "", ""
     try:
@@ -17,50 +16,49 @@ if __name__ == "__main__":
     except:
       pass
 
-    message = "%s:status:" % platform
-    if scorpbot_connected:
-      if action == "action" and details == 'home':
-        print "Publish: %shoming" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "homing")
-        scorp.go_home()
-        print "Publish: %sonline" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "online")
-      elif action == "calibrate":
-        print "Publish: %scalibrating" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "calibrating")
-        webcam.detect_all_colors()
-        scorp.color_points = webcam.color_points()
-        print "Publish: %sonline" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "online")
-      # elif details == ""
-      elif action == "action" and "move" in details:
-        _, point = details.split("_")
-        print "Publish: %smoving" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "moving")
-        scorp.move(point)
-        print "Publish: %sonline" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "online")
-      elif details in COLORS.values():
-        print "Publish: %smoving to %s" % (message, details)
-        pub.publish(OUTBOUND_CHANNEL, message + "moving to %s" % details)
-        scorp.touch_color_point(details)
-        print "Publish: %sonline" % message
-        pub.publish(OUTBOUND_CHANNEL, message + "online")
-
-
-    else:
-      if platform == 'scorp' and details == 'connect':
-        try:
+    if platform == 'scorp':
+      message = "%s:status:" % platform
+      if scorpbot_connected:
+        if action == "action" and details == 'home':
           print "Publish: %shoming" % message
           pub.publish(OUTBOUND_CHANNEL, message + "homing")
           scorp.go_home()
+          print "Publish: %sonline" % message
+          pub.publish(OUTBOUND_CHANNEL, message + "online")
+        elif action == "action" and details == "calibrate":
           print "Publish: %scalibrating" % message
           pub.publish(OUTBOUND_CHANNEL, message + "calibrating")
           scorp.calibrate()
           print "Publish: %sonline" % message
           pub.publish(OUTBOUND_CHANNEL, message + "online")
-          scorpbot_connected = True
-        except Exception as e:
-          print "Error while attempting to connect to %s: %s" % (platform, e)
-          print "Publish: %soffline" % message
-          pub.publish(OUTBOUND_CHANNEL, message + "offline")
+        # elif details == ""
+        elif action == "action" and "move" in details:
+          _, point = details.split("_")
+          print "Publish: %smoving" % message
+          pub.publish(OUTBOUND_CHANNEL, message + "moving")
+          scorp.move(point)
+          print "Publish: %sonline" % message
+          pub.publish(OUTBOUND_CHANNEL, message + "online")
+        elif details in COLORS.values():
+          print "Publish: %smoving to %s" % (message, details)
+          pub.publish(OUTBOUND_CHANNEL, message + "moving to %s" % details)
+          scorp.touch_color_point(details)
+          print "Publish: %sonline" % message
+          pub.publish(OUTBOUND_CHANNEL, message + "online")
+
+      else:
+        if details == 'connect':
+          try:
+            print "Publish: %shoming" % message
+            pub.publish(OUTBOUND_CHANNEL, message + "homing")
+            scorp.go_home()
+            print "Publish: %scalibrating" % message
+            pub.publish(OUTBOUND_CHANNEL, message + "calibrating")
+            scorp.calibrate()
+            print "Publish: %sonline" % message
+            pub.publish(OUTBOUND_CHANNEL, message + "online")
+            scorpbot_connected = True
+          except Exception as e:
+            print "Error while attempting to connect to %s: %s" % (platform, e)
+            print "Publish: %soffline" % message
+            pub.publish(OUTBOUND_CHANNEL, message + "offline")
