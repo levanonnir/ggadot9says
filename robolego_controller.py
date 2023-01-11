@@ -1,7 +1,7 @@
 from robolego import Lego
 from subscriber import create_subscriber, handle_message
 from connector import connect_to_redis_server
-from globals import CHANNEL
+from globals import OUTBOUND_CHANNEL
 
 if __name__ == "__main__":
   sub = create_subscriber()
@@ -20,20 +20,20 @@ if __name__ == "__main__":
     if robolego_connected and platform == robolego_name:
       # Execute command only if the robot is connected, and the command was sent to him.
       if action == 'sample_color':
-        pub.publish(CHANNEL, "%s:status:sampling" % robolego_name)
+        pub.publish(OUTBOUND_CHANNEL, "%s:status:sampling" % robolego_name)
         color = lego.sample_color()
-        pub.publish(CHANNEL, "%s:color:%s" % (robolego_name, color))
-        pub.publish(CHANNEL, "%s:status:online" % robolego_name)
+        pub.publish(OUTBOUND_CHANNEL, "%s:color:%s" % (robolego_name, color))
+        pub.publish(OUTBOUND_CHANNEL, "%s:status:online" % robolego_name)
       elif action in lego.movementDirections:
         movement_function = getattr(lego, action)
         movement_function(int(details))  # details will be the power setting here.
         if action != "stop":
-          pub.publish(CHANNEL, "%s:status:moving" % robolego_name)
+          pub.publish(OUTBOUND_CHANNEL, "%s:status:moving" % robolego_name)
         else:
-          pub.publish(CHANNEL, "%s:status:online" % robolego_name)
+          pub.publish(OUTBOUND_CHANNEL, "%s:status:online" % robolego_name)
       elif action == "stop":
         lego.stop()
-        pub.publish(CHANNEL, "%s:status:online" % robolego_name)
+        pub.publish(OUTBOUND_CHANNEL, "%s:status:online" % robolego_name)
     else:
       if platform == 'lego' and action == 'connect':
         message = "%s:status:" % details
@@ -41,8 +41,8 @@ if __name__ == "__main__":
           lego.connect(details)
           robolego_name = details
           robolego_connected = True
-          pub.publish(CHANNEL, message + "online")
+          pub.publish(OUTBOUND_CHANNEL, message + "online")
         except Exception as e:
           print "Error while attempting to connect to %s: %s" % (details, e)
-          pub.publish(CHANNEL, message + "offline")
+          pub.publish(OUTBOUND_CHANNEL, message + "offline")
 

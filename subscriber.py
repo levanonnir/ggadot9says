@@ -1,10 +1,10 @@
-from globals import CHANNEL
+from globals import INBOUND_CHANNEL
 from connector import connect_to_redis_server
 
 def create_subscriber():
 	client = connect_to_redis_server()
 	sub = client.pubsub()
-	sub.subscribe(CHANNEL)
+	sub.subscribe(INBOUND_CHANNEL)
 	return sub
 
 def handle_message(message):
