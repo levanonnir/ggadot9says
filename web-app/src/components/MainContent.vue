@@ -154,7 +154,7 @@
                 {{ color }}
               </v-btn>
             </v-col>
-            <v-col v-if="scorpConnected" cols="10">
+            <!-- <v-col v-if="scorpConnected" cols="10">
               <v-text-field
                 v-model="point"
                 type="number"
@@ -162,7 +162,7 @@
                 :disabled="scorpDisabled"
                 
               ></v-text-field>
-            </v-col>
+            </v-col> -->
           </v-row>
         </v-card>
       </v-col>
@@ -230,6 +230,7 @@ export default {
   created() {
     document.title = "GGadot9 Says - Group 7";
     this.ws = new WebSocket("ws://localhost:3000/");
+    // this.ws = new WebSocket("ws://192.168.172.131:3000/");
     this.ws.onopen = () => {
       this.pingServer();
     };
