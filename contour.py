@@ -47,7 +47,7 @@ class Contour():
         self.compute()
         #Show the result as a picture
         
-        cv2.imshow('pic',self.pic)
+        cv2.imshow('contour %s' % self.path,self.pic)
         #Wait untill button is pressed
         cv2.waitKey(0)
         #Clear memory.
