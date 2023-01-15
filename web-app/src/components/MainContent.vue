@@ -256,7 +256,9 @@ export default {
               case "color":
                 if (!["nothing", "black"].includes(dataParts[2])) {
                   this.color = dataParts[2];
-                  this.colors.push(this.color);
+                  if (!this.colors.includes(this.color)) {
+                    this.colors.push(this.color);
+                  }
                 }
                 this.robolegoSampling = false;
                 this.snackbarText = `${this.robolegoName} found ${this.color}`;
